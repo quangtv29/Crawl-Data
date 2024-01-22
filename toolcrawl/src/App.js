@@ -2,11 +2,7 @@ import "./App.css";
 import Crawl from "./Crawl";
 
 function App() {
-  return (
-    <div className="App">
-      <Crawl />
-    </div>
-  );
+  return <Crawl />;
 }
 
 export default App;

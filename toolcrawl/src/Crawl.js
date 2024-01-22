@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./Crawl.css";
+import { Helmet } from "react-helmet";
 
 const Crawl = () => {
   const [link, setLink] = useState("");
@@ -56,6 +57,9 @@ const Crawl = () => {
   };
   return (
     <>
+      <Helmet>
+        <title>Tool crawl</title>
+      </Helmet>
       <h1 style={{ textAlign: "center" }}>TOOL CRAWL DATA BY VINH QUANG</h1>
       <div style={{ display: "flex", justifyContent: "center" }}>
         <label>Nhập link</label>
