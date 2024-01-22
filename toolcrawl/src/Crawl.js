@@ -10,19 +10,18 @@ const Crawl = () => {
   const [items, setItems] = useState([]);
   const [input, setInput] = useState([]);
   const [name, setName] = useState("");
+  const [excelData, setExcelData] = useState(null);
+
   const handleClick = () => {
-    // Kiểm tra xem tất cả các trường thông tin đã được nhập đủ hay chưa
     if (link.trim() === "" || number <= 0 || name.trim() === "") {
       alert("Vui lòng nhập đủ thông tin (Link, Số trường, Tên file)!");
       return;
     }
 
-    // Tạo một mảng mới với số lượng phần tử là number
     const newItems = Array.from(
       { length: Number(number) },
       (_, index) => index + 1
     );
-
     setItems(newItems);
     setState(true);
   };
@@ -34,8 +33,10 @@ const Crawl = () => {
         classNames: input,
         fileName: name + ".xlsx",
       });
+
       if (response.data.status) {
         alert("Crawl data thành công");
+        setExcelData(response.data.file);
         setState(false);
         setLink("");
         setNumber(1);
@@ -53,6 +54,17 @@ const Crawl = () => {
       setLink("");
       setNumber(1);
       setName("");
+    }
+  };
+
+  const handleDownloadExcel = () => {
+    if (excelData) {
+      const link = document.createElement("a");
+      link.href = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelData}`;
+      link.download = "downloaded_excel.xlsx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
   return (
@@ -117,6 +129,9 @@ const Crawl = () => {
             />
           ))}
         {state && <button onClick={() => handleCrawlData()}>Crawl data</button>}
+        {excelData && (
+          <button onClick={() => handleDownloadExcel()}>Download Excel</button>
+        )}
       </div>
     </>
   );

@@ -3,12 +3,14 @@ const puppeteer = require("puppeteer");
 const cheerio = require("cheerio");
 const ExcelJS = require("exceljs");
 const cors = require("cors");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const port = 3001;
 
 app.use(cors());
-app.use(express.json()); // Để có thể đọc dữ liệu JSON từ request body
+app.use(express.json());
 
 app.post("/crawlAndSave", async (req, res) => {
   try {
@@ -24,11 +26,15 @@ app.post("/crawlAndSave", async (req, res) => {
     }
 
     const products = await crawlData(url, classNames);
-    await saveToExcel(products, fileName);
+    const filePath = await saveToExcel(products, fileName);
+
+    const fileContent = fs.readFileSync(filePath, { encoding: "base64" });
+    fs.unlinkSync(filePath); // Xóa tệp Excel trên máy chủ sau khi chuyển đổi thành base64
 
     res.json({
-      message: `Tệp Excel "${fileName}" đã được tạo thành công.`,
+      message: `Dữ liệu Excel đã được chuyển đổi thành công.`,
       status: true,
+      file: fileContent,
     });
   } catch (error) {
     console.error("Lỗi:", error);
@@ -81,9 +87,11 @@ async function saveToExcel(products, fileName) {
     worksheet.addRow(product);
   });
 
+  const outputPath = path.join(__dirname, fileName);
   try {
-    await workbook.xlsx.writeFile(fileName);
-    console.log(`Tệp Excel "${fileName}" đã được tạo thành công.`);
+    await workbook.xlsx.writeFile(outputPath);
+    console.log(`Tệp Excel "${outputPath}" đã được tạo thành công.`);
+    return outputPath;
   } catch (error) {
     console.error("Lỗi khi tạo tệp Excel:", error);
     throw error;
