@@ -1,18 +1,6 @@
 {
     "version": 2,
     "builds": [{ "src": "crawl.js", "use": "@vercel/node" }],
-    "routes": [
-      {
-        "src": "/crawlAndSave",
-        "dest": "/your-app-file.js",
-        "methods": ["POST"],
-        "headers": {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "OPTIONS, POST, GET, PUT, DELETE",
-          "Access-Control-Allow-Headers": "Content-Type"
-        }
-      },
-      { "src": "/(.*)", "dest": "/crawl.js" }
-    ]
+    "routes": [{ "src": "/(.*)", "dest": "crawl.js" }]
   }
   
