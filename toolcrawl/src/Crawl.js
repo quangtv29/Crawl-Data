@@ -38,9 +38,6 @@ const Crawl = () => {
         alert("Crawl data thành công");
         setExcelData(response.data.file);
         setState(false);
-        setLink("");
-        setNumber(1);
-        setName("");
       } else {
         alert("Crawl data thất bại");
         setState(false);
@@ -61,10 +58,13 @@ const Crawl = () => {
     if (excelData) {
       const link = document.createElement("a");
       link.href = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${excelData}`;
-      link.download = "downloaded_excel.xlsx";
+      link.download = name + ".xlsx";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      setLink("");
+      setNumber(1);
+      setName("");
     }
   };
   return (
