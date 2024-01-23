@@ -28,11 +28,14 @@ const Crawl = () => {
 
   const handleCrawlData = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/crawlAndSave", {
-        url: link,
-        classNames: input,
-        fileName: name + ".xlsx",
-      });
+      const response = await axios.post(
+        "https://crawldata1.vercel.app/crawlAndSave",
+        {
+          url: link,
+          classNames: input,
+          fileName: name + ".xlsx",
+        }
+      );
 
       if (response.data.status) {
         alert("Crawl data thành công");
@@ -46,6 +49,7 @@ const Crawl = () => {
         setName("");
       }
     } catch (error) {
+      console.error(error);
       alert("Thông tin đầu vào không đúng!");
       setState(false);
       setLink("");
